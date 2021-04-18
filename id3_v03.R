@@ -26,13 +26,6 @@ defineformula <- function(dados,formula){
 }
 
 
-desenho_modelo <-  defineformula(df,"Jogartenis~Tempo+Temperatura+Umidade+Vento")
-desenho_modelo$dados
-desenho_modelo$formula
-desenho_modelo$resposta
-desenho_modelo$preditoras
-desenho_modelo$classes
-
 #definindo a função entropia
 entropia <- function(vetor){
   entropia_temp = - sum(vetor/sum(vetor) * log2(vetor/sum(vetor)))
@@ -49,9 +42,6 @@ entropia2 <- function(vetor){
   return(entropia_final)
 } 
 
-#testando a função entropia
-entropia(table(desenho_modelo$dados[[desenho_modelo$resposta]]))
-
 #Criando a função que calcula o ganho de informação
 ganhoinfo <- function(dados,variavel,alvo){
   return(
@@ -61,6 +51,12 @@ ganhoinfo <- function(dados,variavel,alvo){
       )
   )
 }
+
+# testando a função define modelo
+desenho_modelo <-  defineformula(df,"Jogartenis~Tempo+Temperatura+Umidade+Vento")
+
+#testando a função entropia
+entropia(table(desenho_modelo$dados[[desenho_modelo$resposta]]))
 
 #testando a função Ganho de informação
 ganhoinfo(desenho_modelo$dados,desenho_modelo$preditoras[1],desenho_modelo$resposta)
@@ -89,7 +85,6 @@ pred_restantes <- pred_restantes[pred_restantes!=fatiar[[1]]]
 pred_restantes
 
 #construindo a árvore
-
 arvore <- data.frame(
   no = as.numeric(1),
   profundidade = as.numeric(0),
@@ -104,7 +99,6 @@ arvore$folha <- ifelse(arvore$entropia==0,1,0)
 arvore$condicao <- ""
 
 #Atualizando a árvore
-
 arvore_temp <- data.frame(
   no = (as.numeric(max(arvore[['no']]))+1):(as.numeric(max(arvore[['no']]))+as.numeric(fatiar[[3]])),
   profundidade = as.numeric(1),
